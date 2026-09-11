@@ -16,10 +16,10 @@ const availableJob = {
     requiredExperience: "2",
     jobLocation: "novo hamburgo",
     shiftType: "2",
-    requiredSkills: [],
+    requiredSkills: ["js", "html", "css", "hardware"],
     // Crtitérios de Compatibilidade
-    preferredSkills: [],
-    salaryRange: "",
+    preferredSkills: ["sql", "api", "crud", "node", "opencv"],
+    salaryRange: 1500,
 
 }
 
@@ -33,7 +33,7 @@ const candidateInfo = {
     candidateLocations: [],
     preferredShift: "",
     candidateSkills: [],
-    salaryExpectation: "",
+    salaryExpectation: null,
 }
 
 // Declaração de variáveis para receber respostas do usuário e armazenar como parâmetros do objeto candidateInfo.
@@ -72,7 +72,7 @@ for (let skillsEntered = 0; skillsEntered < 10; skillsEntered++) {
     candidateInfo.candidateSkills[skillsEntered] = skills;
 }
 
-const userSalary = prompt("Qual sua pretensão salarial buscando um emprego?");
+const userSalary = Number(prompt("Qual sua pretensão salarial buscando um emprego?"));
 candidateInfo.salaryExpectation = userSalary;
 
 // Armazena o resultado das comparações realizadas em cada função
@@ -231,7 +231,7 @@ resultsObtained.push(shiftResult);
 
 // Para cada skill exigida, procura entre todas as skilss do usuário. Se uma obrigatória não for encontrada, retorna false. Só retorna true após verificar todas.
 
-function comparisonSkills (jobRequiredSkills, userSkills) {
+function comparisonRequiredSkills (jobRequiredSkills, userSkills) {
 
     for (let verifiedJobSkills = 0; verifiedJobSkills < jobRequiredSkills.length; verifiedJobSkills++) {
 
@@ -255,16 +255,97 @@ function comparisonSkills (jobRequiredSkills, userSkills) {
         }
         
     return {
-        criterion: "skills required",
+        criterion: "required skills",
         compatible: true,
         critical: true,
         message: "O usuário possui todas as habilidades requeridas pela vaga."
         };
 }
 
-const resultSkills = comparisonSkills (availableJob.requiredSkills, candidateInfo.candidateSkills);
+const requiredSkillsResult = comparisonRequiredSkills (availableJob.requiredSkills, candidateInfo.candidateSkills);
 
-resultSkills.push(resultSkills);
+resultsObtained.push(requiredSkillsResult);
+
+function comparisonPreferredSkills (jobPreferredSkills, userSkills) {
+
+    let skillCount = 0;
+
+    for (let verifiedJobSkills = 0; verifiedJobSkills < jobPreferredSkills.length; verifiedJobSkills++) {
+
+        for (let verifiedUserSkills = 0; verifiedUserSkills < userSkills.length; verifiedUserSkills++) {
+
+            if(jobPreferredSkills[verifiedJobSkills] === userSkills [verifiedUserSkills]) {
+                skillCount ++;
+                break;
+            }
+        }
+    }
+
+    let skillPercentage = (skillCount * 100) / jobPreferredSkills.length;
+
+    return {
+        criterion: "preferred skills",
+        critical: false,
+        matchedSkills: skillCount,
+        totalSkills: jobPreferredSkills.length,
+        percentage: skillPercentage + "%",
+        message: "O usuário possui " + skillCount + " habilidades das " + jobPreferredSkills.length + " mencionadas como diferenciais na vaga",
+    };
+}
+
+const preferredSkillsResult = comparisonPreferredSkills (availableJob.preferredSkills, candidateInfo.candidateSkills);
+
+resultsObtained.push(preferredSkillsResult);
+
+function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
+
+    let salaryDiferrence;
+    let salaryDiferrencePercentage;
+
+    if (jobSalaryRange > userSalaryExpectation) {
+        salaryDiferrence = jobSalaryRange - userSalaryExpectation;
+        salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
+
+        return {
+        criterion: "salary",
+        critical: false,
+        comparable: true,
+        relation: "above",
+        difference: "R$ " + salaryDiferrence + ".00",
+        differencePercentage: salaryDiferrencePercentage + "%",
+        message: "O salário é " + salaryDiferrencePercentage.toFixed(2) + "% maior do que a pretensão do usuário",
+        }
+    }
+
+    else if (jobSalaryRange === userSalaryExpectation) {
+        return {
+        criterion: "salary",
+        critical: false,
+        comparable: true,
+        relation: "equal",
+        message: "O salário oferecido é equivalente a pretensão do usuário",
+        }
+    }
+
+    else {
+        salaryDiferrence = userSalaryExpectation - jobSalaryRange;
+        salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
+
+        return {
+        criterion: "salary",
+        critical: false,
+        comparable: true,
+        relation: "below",
+        difference: "R$ " + salaryDiferrence + ".00",
+        differencePercentage: salaryDiferrencePercentage + "%",
+        message: "O salário é " + salaryDiferrencePercentage.toFixed(2) + "% menor do que a pretensão do usuário",
+        }
+    }
+}
+
+const salaryResult = comparisonSalary (availableJob.salaryRange, candidateInfo.salaryExpectation);
+
+resultsObtained.push(salaryResult);
 
 console.log(resultsObtained);
 
