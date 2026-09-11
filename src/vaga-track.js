@@ -7,19 +7,19 @@ const availableJob = {
     // distinção entre os parâmetros considerando que o peso de cada um numa analise é diferente e determinante para saber se a vaga é ou não é boa para o usuário.
 
     //Informações Básicas
-    companyName: "",
+    companyName: "Vaga Mor",
     jobTitle: "",
     // Critérios essenciais
-    jobType: "2",
-    requiredEducation: "2",
-    workModel: "2",
+    jobType: "1",
+    requiredEducation: "1",
+    workModel: "4",
     requiredExperience: "2",
-    jobLocation: "novo hamburgo",
+    jobLocation: "cachoeirinha",
     shiftType: "2",
-    requiredSkills: ["js", "html", "css", "hardware"],
+    requiredSkills: ["js", "html"],
     // Crtitérios de Compatibilidade
     preferredSkills: ["sql", "api", "crud", "node", "opencv"],
-    salaryRange: 1500,
+    salaryRange: 957,
 
 }
 
@@ -81,21 +81,34 @@ const resultsObtained = [];
 
 function comparisonJobType (informedJobType, userPreferredJob) {
 
-    if (informedJobType === userPreferredJob) {
+    if (informedJobType === null) {
         return {
             criterion: "Job Type",
-            compatible: true,
+            compatible: null,
             critical: true,
-            message: "O tipo de vaga é compatível com a procura do usuário.",
-        }
+            comparable: false,
+            message: "Dados não informados na descrisão da vaga",
+        };
     }
 
     else {
-        return {
-            criterion: "Job Type",
-            compatible: false,
-            critical: true,
-            message: "O tipo de vaga não é compatível com a procura do usuário.",
+        if (informedJobType === userPreferredJob) {
+            return {
+                criterion: "Job Type",
+                compatible: true,
+                critical: true,
+                comparable: true,
+                message: "O tipo de vaga é compatível com a procura do usuário.",
+            }
+        }
+        else {
+            return {
+                criterion: "Job Type",
+                compatible: false,
+                critical: true,
+                comparable: true,
+                message: "O tipo de vaga não é compatível com a procura do usuário.",
+            }
         }
     }
 }
@@ -106,23 +119,37 @@ resultsObtained.push(jobTypeResult);
 
 function comparisonRequiredEducation (jobNecessaryEducation, userEducationResponse) {
 
-    if (jobNecessaryEducation === userEducationResponse) {
+    if (jobNecessaryEducation === null) {
         return {
-            criterion: "education",
-            compatible: true,
+            criterion: "Education",
+            compatible: null,
             critical: true,
-            message: "O usuário cumpre o critério eleminatório de escolaridade.",
-        };
-    } 
-    
-    else {
-        return {
-            criterion: "education",
-            compatible: false,
-            critical: true,
-            message: "O usuário não cumpre o critério eleminatório de escolaridade.",
+            comparable: false,
+            message: "Dados não informados na descrisão da vaga",
         };
     }
+
+    else {
+        if (jobNecessaryEducation === userEducationResponse) {
+            return {
+                criterion: "Education",
+                compatible: true,
+                critical: true,
+                comparable: true,
+                message: "O usuário cumpre o critério eleminatório de escolaridade.",
+            };
+        } 
+    
+        else {
+            return {
+                criterion: "Education",
+                compatible: false,
+                critical: true,
+                comparable: true,
+                message: "O usuário não cumpre o critério eleminatório de escolaridade.",
+            };
+        }
+    }   
 }
 
 const educationResult = comparisonRequiredEducation (availableJob.requiredEducation, candidateInfo.educationLevel);
@@ -131,22 +158,35 @@ resultsObtained.push(educationResult);
 
 function comparisonWorkModel (jobWorkModel, userModelResponse) {
 
-    if (jobWorkModel === userModelResponse) {
+    if (jobWorkModel === null) {
         return {
-            criterion: "work model",
-            compatible: true,
+            criterion: "Work Model",
+            compatible: null,
             critical: true,
-            message: "O usuário cumpre o critério eleminatório de modalidade de trabalho.",
+            comparable: false,
+            message: "Dados não informados na descrisão da vaga",
         };
     }
 
     else {
-        return {
-            criterion: "work model",
-            compatible: false,
-            critical: true,
-            message: "O usuário não cumpre o critério eleminatório de modalidade de trabalho.",
-        };
+        if (jobWorkModel === userModelResponse) {
+            return {
+                criterion: "Work Model",
+                compatible: true,
+                critical: true,
+                comparable: true,
+                message: "O usuário cumpre o critério eleminatório de modalidade de trabalho.",
+            };
+        }
+        else {
+            return {
+                criterion: "Work Model",
+                compatible: false,
+                critical: true,
+                comparable: true,
+                message: "O usuário não cumpre o critério eleminatório de modalidade de trabalho.",
+            };
+        }
     }
 }
 
@@ -156,22 +196,35 @@ resultsObtained.push(workModelResult);
 
 function comparisonExperience (jobRequiredExperience, userExperienceLevel) {
 
-    if (jobRequiredExperience === "1" && userExperienceLevel === "2") {
+    if (jobRequiredExperience === null) {
         return {
-            criterion: "experience",
-            compatible: false,
+            criterion: "Experience",
+            compatible: null,
             critical: true,
-            message: "O usuário não possui a experiência necessária para a vaga.",
+            comparable: false,
+            message: "Dados não informados na descrisão da vaga",
         };
     }
 
     else {
-        return {
-            criterion: "experience",
-            compatible: true,
-            critical: true,
-            message: "O usuário possui a experiência necessária para a vaga ou a vaga não exige experiência.",
-        };
+        if (jobRequiredExperience === "1" && userExperienceLevel === "2") {
+            return {
+                criterion: "Experience",
+                compatible: false,
+                critical: true,
+                comparable: true,
+                message: "O usuário não possui a experiência necessária para a vaga.",
+            };
+        }
+        else {
+            return {
+                criterion: "experience",
+                compatible: true,
+                critical: true,
+                comparable: true,
+                message: "O usuário possui a experiência necessária para a vaga ou a vaga não exige experiência.",
+            };
+        }
     }
 }
 
@@ -181,23 +234,37 @@ resultsObtained.push(experienceResult);
 
 function comparisonLocation (jobLocationInformed, userPossibleLocations) {
 
-    for (let verifiedLocations = 0; verifiedLocations < userPossibleLocations.length; verifiedLocations++) {
-            
-        if (jobLocationInformed === userPossibleLocations[verifiedLocations])
-            return {
-                criterion: "location",
-                compatible: true,
-                critical: true,
-                message: "A localização da vaga é acessível ao usuário.",
-            };
-        }
+    if (jobLocationInformed === null) {
+        return {
+            criterion: "Location",
+            compatible: null,
+            critical: true,
+            comparable: false,
+            message: "Dados não informados na descrisão da vaga",
+        };
+    }
 
-    return {
-        criterion: "location",
-        compatible: false,
-        critical: true,
-        message: "A localização da vaga não é acessível ao usuário.",
-    };
+    else {
+        for (let verifiedLocations = 0; verifiedLocations < userPossibleLocations.length; verifiedLocations++) {
+            
+            if (jobLocationInformed === userPossibleLocations[verifiedLocations])
+                return {
+                    criterion: "Location",
+                    compatible: true,
+                    critical: true,
+                    comparable: true,
+                    message: "A localização da vaga é acessível ao usuário.",
+                };
+            }
+
+        return {
+            criterion: "Location",
+            compatible: false,
+            critical: true,
+            comparable: true,
+            message: "A localização da vaga não é acessível ao usuário.",
+        };
+    }
 }
 
 const locationResult = comparisonLocation (availableJob.jobLocation, candidateInfo.candidateLocations);
@@ -206,21 +273,34 @@ resultsObtained.push(locationResult);
 
 function comparisonShift (jobShiftType, userPreferredShift) {
 
-    if (jobShiftType === userPreferredShift) {
+    if (jobShiftType === null) {
         return {
-            criterion: "shift",
-            compatible: true,
+            criterion: "Shift",
+            compatible: null,
             critical: true,
-            message: "O turno da vaga é compatível com a necessidade do usuário.",
-        }
+            comparable: false,
+            message: "Dados não informados na descrisão da vaga",
+        };
     }
 
     else {
-        return {
-            criterion: "shift",
-            compatible: false,
-            critical: true,
-            message: "O turno da vaga não é compatível com a necessidade do usuário.",
+        if (jobShiftType === userPreferredShift) {
+            return {
+                criterion: "Shift",
+                compatible: true,
+                critical: true,
+                comparable: true,
+                message: "O turno da vaga é compatível com a necessidade do usuário.",
+            }
+        }
+        else {
+            return {
+                criterion: "Shift",
+                compatible: false,
+                critical: true,
+                comparable: true,
+                message: "O turno da vaga não é compatível com a necessidade do usuário.",
+            }
         }
     }
 }
@@ -233,33 +313,47 @@ resultsObtained.push(shiftResult);
 
 function comparisonRequiredSkills (jobRequiredSkills, userSkills) {
 
-    for (let verifiedJobSkills = 0; verifiedJobSkills < jobRequiredSkills.length; verifiedJobSkills++) {
-
-        let skillFound = false;
-
-        for (let verifiedUserSkills = 0; verifiedUserSkills < userSkills.length; verifiedUserSkills++) {
-
-            if (jobRequiredSkills[verifiedJobSkills] === userSkills[verifiedUserSkills]) {
-            skillFound = true;
-            break;
-            }
-        }
-
-        if (skillFound === false)
-            return {
-            criterion: "skills required",
-            compatible: false,
+    if (jobRequiredSkills === null) {
+        return {
+            criterion: "Required Skills",
+            compatible: null,
             critical: true,
-            message: "O usuário não possui todas as habilidades requeridas pela vaga.",
-            };
-        }
-        
-    return {
-        criterion: "required skills",
-        compatible: true,
-        critical: true,
-        message: "O usuário possui todas as habilidades requeridas pela vaga."
+            comparable: false,
+            message: "Dados não informados na descrisão da vaga",
         };
+    }
+
+    else {
+        for (let verifiedJobSkills = 0; verifiedJobSkills < jobRequiredSkills.length; verifiedJobSkills++) {
+
+            let skillFound = false;
+
+            for (let verifiedUserSkills = 0; verifiedUserSkills < userSkills.length; verifiedUserSkills++) {
+
+                if (jobRequiredSkills[verifiedJobSkills] === userSkills[verifiedUserSkills]) {
+                skillFound = true;
+                break;
+                }
+            }
+
+            if (skillFound === false)
+                return {
+                criterion: "Required Skills",
+                compatible: false,
+                critical: true,
+                comparable: true,
+                message: "O usuário não possui todas as habilidades requeridas pela vaga.",
+                };
+            }
+        
+        return {
+            criterion: "Required Skills",
+            compatible: true,
+            critical: true,
+            comparable: true,
+            message: "O usuário possui todas as habilidades requeridas pela vaga.",
+        };
+    }
 }
 
 const requiredSkillsResult = comparisonRequiredSkills (availableJob.requiredSkills, candidateInfo.candidateSkills);
@@ -268,29 +362,42 @@ resultsObtained.push(requiredSkillsResult);
 
 function comparisonPreferredSkills (jobPreferredSkills, userSkills) {
 
-    let skillCount = 0;
-
-    for (let verifiedJobSkills = 0; verifiedJobSkills < jobPreferredSkills.length; verifiedJobSkills++) {
-
-        for (let verifiedUserSkills = 0; verifiedUserSkills < userSkills.length; verifiedUserSkills++) {
-
-            if(jobPreferredSkills[verifiedJobSkills] === userSkills [verifiedUserSkills]) {
-                skillCount ++;
-                break;
-            }
-        }
+    if (jobPreferredSkills === null) {
+        return {
+            criterion: "Location",
+            compatible: null,
+            critical: false,
+            comparable: false,
+            message: "Dados não informados na descrisão da vaga",
+        };
     }
 
-    let skillPercentage = (skillCount * 100) / jobPreferredSkills.length;
+    else {
 
-    return {
-        criterion: "preferred skills",
-        critical: false,
-        matchedSkills: skillCount,
-        totalSkills: jobPreferredSkills.length,
-        percentage: skillPercentage + "%",
-        message: "O usuário possui " + skillCount + " habilidades das " + jobPreferredSkills.length + " mencionadas como diferenciais na vaga",
-    };
+        let skillCount = 0;
+
+        for (let verifiedJobSkills = 0; verifiedJobSkills < jobPreferredSkills.length; verifiedJobSkills++) {
+
+            for (let verifiedUserSkills = 0; verifiedUserSkills < userSkills.length; verifiedUserSkills++) {
+
+                if(jobPreferredSkills[verifiedJobSkills] === userSkills [verifiedUserSkills]) {
+                    skillCount ++;
+                    break;
+                }
+            }
+        }
+
+        let skillPercentage = (skillCount * 100) / jobPreferredSkills.length;
+
+        return {
+            criterion: "preferred skills",
+            critical: false,
+            matchedSkills: skillCount,
+            totalSkills: jobPreferredSkills.length,
+            percentage: skillPercentage + "%",
+            message: "O usuário possui " + skillCount + " habilidades das " + jobPreferredSkills.length + " mencionadas como diferenciais na vaga",
+        };
+    }
 }
 
 const preferredSkillsResult = comparisonPreferredSkills (availableJob.preferredSkills, candidateInfo.candidateSkills);
@@ -299,46 +406,58 @@ resultsObtained.push(preferredSkillsResult);
 
 function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
 
-    let salaryDiferrence;
-    let salaryDiferrencePercentage;
-
-    if (jobSalaryRange > userSalaryExpectation) {
-        salaryDiferrence = jobSalaryRange - userSalaryExpectation;
-        salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
-
+    if (jobSalaryRange === null) {
         return {
-        criterion: "salary",
-        critical: false,
-        comparable: true,
-        relation: "above",
-        difference: "R$ " + salaryDiferrence + ".00",
-        differencePercentage: salaryDiferrencePercentage + "%",
-        message: "O salário é " + salaryDiferrencePercentage.toFixed(2) + "% maior do que a pretensão do usuário",
-        }
-    }
-
-    else if (jobSalaryRange === userSalaryExpectation) {
-        return {
-        criterion: "salary",
-        critical: false,
-        comparable: true,
-        relation: "equal",
-        message: "O salário oferecido é equivalente a pretensão do usuário",
-        }
+            criterion: "Salary",
+            compatible: null,
+            critical: false,
+            comparable: false,
+            message: "Dados não informados na descrisão da vaga",
+        };
     }
 
     else {
-        salaryDiferrence = userSalaryExpectation - jobSalaryRange;
+        let salaryDiferrence;
+        let salaryDiferrencePercentage;
+
+        if (jobSalaryRange > userSalaryExpectation) {
+            salaryDiferrence = jobSalaryRange - userSalaryExpectation;
+            salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
+
+            return {
+            criterion: "Salary",
+            critical: false,
+            comparable: true,
+            relation: "above",
+            difference: "R$ " + salaryDiferrence + ".00",
+            differencePercentage: salaryDiferrencePercentage + "%",
+            message: "O salário é " + salaryDiferrencePercentage.toFixed(2) + "% maior do que a pretensão do usuário",
+            };
+        }
+
+        else if (jobSalaryRange === userSalaryExpectation) {
+            return {
+            criterion: "Salary",
+            critical: false,
+            comparable: true,
+            relation: "equal",
+            message: "O salário oferecido é equivalente a pretensão do usuário",
+            };
+        }
+
+        else {
+            salaryDiferrence = userSalaryExpectation - jobSalaryRange;
         salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
 
-        return {
-        criterion: "salary",
-        critical: false,
-        comparable: true,
-        relation: "below",
-        difference: "R$ " + salaryDiferrence + ".00",
-        differencePercentage: salaryDiferrencePercentage + "%",
-        message: "O salário é " + salaryDiferrencePercentage.toFixed(2) + "% menor do que a pretensão do usuário",
+            return {
+            criterion: "salary",
+            ritical: false,
+            comparable: true,
+            relation: "below",
+            difference: "R$ " + salaryDiferrence + ".00",
+            differencePercentage: salaryDiferrencePercentage + "%",
+            message: "O salário é " + salaryDiferrencePercentage.toFixed(2) + "% menor do que a pretensão do usuário",
+            }
         }
     }
 }
