@@ -6,22 +6,21 @@ const availableJob = {
 
     // distinção entre os parâmetros considerando que o peso de cada um numa analise é diferente e determinante para saber se a vaga é ou não é boa para o usuário.
 
+    //Informações Básicas
     companyName: "",
     jobTitle: "",
-    jobType: "",
-    salaryRange: "",
-    shiftType: "",
-    preferredSkills: [],
-
-    // Parte superior: critérios não eleminatórios
-    // Parte inferior: critérios eliminatórios
-
-    requiredEducation: "",
-    workModel: "",
-    requiredExperience: "",
-    jobLocation: "",
+    // Critérios essenciais
+    jobType: "2",
+    requiredEducation: "2",
+    workModel: "2",
+    requiredExperience: "2",
+    jobLocation: "novo hamburgo",
+    shiftType: "2",
     requiredSkills: [],
-    
+    // Crtitérios de Compatibilidade
+    preferredSkills: [],
+    salaryRange: "",
+
 }
 
 // o objeto candidateInfo define os parâmetros enviados pelo usuário para que sejam comparados com os parâmetros verificados no objeto availableJob.
@@ -32,9 +31,9 @@ const candidateInfo = {
     desiredWorkModel: "",
     experienceLevel: "",
     candidateLocations: [],
-    salaryExpectation: "",
     preferredShift: "",
     candidateSkills: [],
+    salaryExpectation: "",
 }
 
 // Declaração de variáveis para receber respostas do usuário e armazenar como parâmetros do objeto candidateInfo.
@@ -57,9 +56,6 @@ for (let locationsEntered = 0; locationsEntered < 3; locationsEntered++) {
 
 }
 
-const userSalary = prompt("Qual sua pretensão salarial buscando um emprego?");
-candidateInfo.salaryExpectation = userSalary;
-
 const userShift = prompt("Em qual turno você deseja trabalhar?\n1 - Parcial manhãs\n2 - Parcial tardes\n3 - Integral");
 candidateInfo.preferredShift = userShift;
 
@@ -76,8 +72,204 @@ for (let skillsEntered = 0; skillsEntered < 10; skillsEntered++) {
     candidateInfo.candidateSkills[skillsEntered] = skills;
 }
 
+const userSalary = prompt("Qual sua pretensão salarial buscando um emprego?");
+candidateInfo.salaryExpectation = userSalary;
+
+// Armazena o resultado das comparações realizadas em cada função
+
+const resultsObtained = [];
+
+function comparisonJobType (informedJobType, userPreferredJob) {
+
+    if (informedJobType === userPreferredJob) {
+        return {
+            criterion: "Job Type",
+            compatible: true,
+            critical: true,
+            message: "O tipo de vaga é compatível com a procura do usuário.",
+        }
+    }
+
+    else {
+        return {
+            criterion: "Job Type",
+            compatible: false,
+            critical: true,
+            message: "O tipo de vaga não é compatível com a procura do usuário.",
+        }
+    }
+}
+
+const jobTypeResult = comparisonJobType (availableJob.jobType, candidateInfo.preferredJob);
+
+resultsObtained.push(jobTypeResult);
+
+function comparisonRequiredEducation (jobNecessaryEducation, userEducationResponse) {
+
+    if (jobNecessaryEducation === userEducationResponse) {
+        return {
+            criterion: "education",
+            compatible: true,
+            critical: true,
+            message: "O usuário cumpre o critério eleminatório de escolaridade.",
+        };
+    } 
+    
+    else {
+        return {
+            criterion: "education",
+            compatible: false,
+            critical: true,
+            message: "O usuário não cumpre o critério eleminatório de escolaridade.",
+        };
+    }
+}
+
+const educationResult = comparisonRequiredEducation (availableJob.requiredEducation, candidateInfo.educationLevel);
+
+resultsObtained.push(educationResult);
+
+function comparisonWorkModel (jobWorkModel, userModelResponse) {
+
+    if (jobWorkModel === userModelResponse) {
+        return {
+            criterion: "work model",
+            compatible: true,
+            critical: true,
+            message: "O usuário cumpre o critério eleminatório de modalidade de trabalho.",
+        };
+    }
+
+    else {
+        return {
+            criterion: "work model",
+            compatible: false,
+            critical: true,
+            message: "O usuário não cumpre o critério eleminatório de modalidade de trabalho.",
+        };
+    }
+}
+
+const workModelResult = comparisonWorkModel (availableJob.workModel, candidateInfo.desiredWorkModel);
+
+resultsObtained.push(workModelResult);
+
+function comparisonExperience (jobRequiredExperience, userExperienceLevel) {
+
+    if (jobRequiredExperience === "1" && userExperienceLevel === "2") {
+        return {
+            criterion: "experience",
+            compatible: false,
+            critical: true,
+            message: "O usuário não possui a experiência necessária para a vaga.",
+        };
+    }
+
+    else {
+        return {
+            criterion: "experience",
+            compatible: true,
+            critical: true,
+            message: "O usuário possui a experiência necessária para a vaga ou a vaga não exige experiência.",
+        };
+    }
+}
+
+const experienceResult = comparisonExperience (availableJob.requiredExperience, candidateInfo.experienceLevel);
+
+resultsObtained.push(experienceResult);
+
+function comparisonLocation (jobLocationInformed, userPossibleLocations) {
+
+    for (let verifiedLocations = 0; verifiedLocations < userPossibleLocations.length; verifiedLocations++) {
+            
+        if (jobLocationInformed === userPossibleLocations[verifiedLocations])
+            return {
+                criterion: "location",
+                compatible: true,
+                critical: true,
+                message: "A localização da vaga é acessível ao usuário.",
+            };
+        }
+
+    return {
+        criterion: "location",
+        compatible: false,
+        critical: true,
+        message: "A localização da vaga não é acessível ao usuário.",
+    };
+}
+
+const locationResult = comparisonLocation (availableJob.jobLocation, candidateInfo.candidateLocations);
+
+resultsObtained.push(locationResult);
+
+function comparisonShift (jobShiftType, userPreferredShift) {
+
+    if (jobShiftType === userPreferredShift) {
+        return {
+            criterion: "shift",
+            compatible: true,
+            critical: true,
+            message: "O turno da vaga é compatível com a necessidade do usuário.",
+        }
+    }
+
+    else {
+        return {
+            criterion: "shift",
+            compatible: false,
+            critical: true,
+            message: "O turno da vaga não é compatível com a necessidade do usuário.",
+        }
+    }
+}
+
+const shiftResult = comparisonShift (availableJob.shiftType, candidateInfo.preferredShift);
+
+resultsObtained.push(shiftResult);
+
+// Para cada skill exigida, procura entre todas as skilss do usuário. Se uma obrigatória não for encontrada, retorna false. Só retorna true após verificar todas.
+
+function comparisonSkills (jobRequiredSkills, userSkills) {
+
+    for (let verifiedJobSkills = 0; verifiedJobSkills < jobRequiredSkills.length; verifiedJobSkills++) {
+
+        let skillFound = false;
+
+        for (let verifiedUserSkills = 0; verifiedUserSkills < userSkills.length; verifiedUserSkills++) {
+
+            if (jobRequiredSkills[verifiedJobSkills] === userSkills[verifiedUserSkills]) {
+            skillFound = true;
+            break;
+            }
+        }
+
+        if (skillFound === false)
+            return {
+            criterion: "skills required",
+            compatible: false,
+            critical: true,
+            message: "O usuário não possui todas as habilidades requeridas pela vaga.",
+            };
+        }
+        
+    return {
+        criterion: "skills required",
+        compatible: true,
+        critical: true,
+        message: "O usuário possui todas as habilidades requeridas pela vaga."
+        };
+}
+
+const resultSkills = comparisonSkills (availableJob.requiredSkills, candidateInfo.candidateSkills);
+
+resultSkills.push(resultSkills);
+
+console.log(resultsObtained);
+
 // ---------------------------------------
 
 // O programa compara através de uma função cada um dos tópicos ex: requiredExperience vs experienceLevel.
 
-// Ele baseia sua tomada de decisão inicial a partir dos parâmetros eleminatórios, se falhar e um dos requisitos não for atendido, ele retorna incompatibilidade com a vaga. Se ele atender a todos os requisitos eliminatórios mas falhar nos critérios não eleminatórios ele retorna um positivo, com ressalvas a serem consideradas pelo proprio usuário. Por último, se tanto os requisitos eliminatórios estiverem corretos e os critérios não eleminatórios estiverem positivos em suma maioria, o sistema retornara fortemente a recomendação da vaga.
+/* Ele baseia sua tomada de decisão inicial a partir dos parâmetros eleminatórios, se falhar e um dos requisitos não for atendido, ele retorna incompatibilidade com a vaga. Se ele atender a todos os requisitos eliminatórios mas falhar nos critérios não eleminatórios ele retorna um positivo, com ressalvas a serem consideradas pelo proprio usuário. Por último, se tanto os requisitos eliminatórios estiverem corretos e os critérios não eleminatórios estiverem positivos em suma maioria, o sistema retornara fortemente a recomendação da vaga.*/
