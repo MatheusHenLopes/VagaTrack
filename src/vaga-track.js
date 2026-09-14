@@ -2,32 +2,95 @@
 
 // O objeto avaiableJob define os parâmetros analisados em uma vaga para posterior comparação.
 
-const availableJob = {
-
+const availableJobs = [
     // distinção entre os parâmetros considerando que o peso de cada um numa analise é diferente e determinante para saber se a vaga é ou não é boa para o usuário.
-
+{
     //Informações Básicas
-    companyName: "Vaga Mor",
-    jobTitle: "",
+    companyName: "Hospital Unimed",
+    jobTitle: "Aprendiz de Desenvolvimento de Software",
     // Critérios essenciais
     jobType: "1",
-    requiredEducation: "1",
-    workModel: "4",
+    requiredEducation: 1,
+    workModel: "1",
     requiredExperience: "2",
-    jobLocation: "cachoeirinha",
+    jobLocation: "novo hamburgo",
     shiftType: "2",
-    requiredSkills: ["js", "html"],
+    requiredSkills: ["lógica", "html", "css", "algoritmos"],
     // Crtitérios de Compatibilidade
-    preferredSkills: ["sql", "api", "crud", "node", "opencv"],
-    salaryRange: 957,
-
-}
+    preferredSkills: ["git", "js", "node"],
+    salaryRange: null,
+},
+{
+    //Informações Básicas
+    companyName: "CWI",
+    jobTitle: "Estagiário de QA (Quality Assurance)",
+    // Critérios essenciais
+    jobType: "2",
+    requiredEducation: 2,
+    workModel: "3",
+    requiredExperience: "2",
+    jobLocation: "são leopoldo",
+    shiftType: null,
+    requiredSkills: ["js", "html", "sql", "api", "node"],
+    // Crtitérios de Compatibilidade
+    preferredSkills: ["python", "opencv", "git", "mediapipe"],
+    salaryRange: 1300,
+},
+{
+    //Informações Básicas
+    companyName: "BairesDev",
+    jobTitle: "Desenvolvedor Front-end Júnior",
+    // Critérios essenciais
+    jobType: "3",
+    requiredEducation: 3,
+    workModel: "2",
+    requiredExperience: "1",
+    jobLocation: null,
+    shiftType: "3",
+    requiredSkills: ["angular", "html", "css", "js", "api"],
+    // Crtitérios de Compatibilidade
+    preferredSkills: ["react", "vue", "preact"],
+    salaryRange: 3700,
+},
+{
+    //Informações Básicas
+    companyName: "Microsoft",
+    jobTitle: "Engenheiro de Dados Pleno",
+    // Critérios essenciais
+    jobType: "4",
+    requiredEducation: 3,
+    workModel: "3",
+    requiredExperience: "1",
+    jobLocation: "porto alegre",
+    shiftType: "3",
+    requiredSkills: ["python", "sql", "spark", "airflow", "aws", "docker"],
+    // Crtitérios de Compatibilidade
+    preferredSkills: null,
+    salaryRange: 8400,
+},
+{
+    //Informações Básicas
+    companyName: "Bradesco",
+    jobTitle: "Tech Lead",
+    // Critérios essenciais
+    jobType: "5",
+    requiredEducation: 3,
+    workModel: null,
+    requiredExperience: "1",
+    jobLocation: "pelotas",
+    shiftType: "3",
+    requiredSkills: ["arquitetura", "microsserviços", "devops", "solid", "ci/cd"],
+    // Crtitérios de Compatibilidade
+    preferredSkills: ["aws", "ingles", "alemão", "espanhol"],
+    salaryRange: 17000,
+},
+]
 
 // o objeto candidateInfo define os parâmetros enviados pelo usuário para que sejam comparados com os parâmetros verificados no objeto availableJob.
 
 const candidateInfo = {
     preferredJob: "",
-    educationLevel: "",
+    educationLevel: null,
     desiredWorkModel: "",
     experienceLevel: "",
     candidateLocations: [],
@@ -41,7 +104,7 @@ const candidateInfo = {
 const userJob = prompt("Que tipo de vaga você está buscando?\n1 - Menor Aprendiz\n2 - Estágio\n3 - Júnior\n4 - Pleno\n5 - Sênior");
 candidateInfo.preferredJob = userJob;
 
-const userEducation = prompt("Qual seu nível atual de escolaridade?\n1 - Ensino Médio\n2 - Curso Técnico\n3 - Graduação");
+const userEducation = Number(prompt("Qual seu nível atual de escolaridade?\n1 - Ensino Médio\n2 - Curso Técnico\n3 - Graduação"));
 candidateInfo.educationLevel = userEducation;
 
 const userWorkModel = prompt("Diga o modelo de trabalho que está buscando:\n1 - Presencial\n2 - Remoto\n3 - Híbrido\n4 - Sem preferência");
@@ -113,7 +176,7 @@ function comparisonJobType (informedJobType, userPreferredJob) {
     }
 }
 
-const jobTypeResult = comparisonJobType (availableJob.jobType, candidateInfo.preferredJob);
+const jobTypeResult = comparisonJobType (availableJobs.jobType, candidateInfo.preferredJob);
 
 resultsObtained.push(jobTypeResult);
 
@@ -130,7 +193,7 @@ function comparisonRequiredEducation (jobNecessaryEducation, userEducationRespon
     }
 
     else {
-        if (jobNecessaryEducation === userEducationResponse) {
+        if (jobNecessaryEducation <= userEducationResponse) {
             return {
                 criterion: "Education",
                 compatible: true,
@@ -152,7 +215,7 @@ function comparisonRequiredEducation (jobNecessaryEducation, userEducationRespon
     }   
 }
 
-const educationResult = comparisonRequiredEducation (availableJob.requiredEducation, candidateInfo.educationLevel);
+const educationResult = comparisonRequiredEducation (availableJobs.requiredEducation, candidateInfo.educationLevel);
 
 resultsObtained.push(educationResult);
 
@@ -169,7 +232,7 @@ function comparisonWorkModel (jobWorkModel, userModelResponse) {
     }
 
     else {
-        if (jobWorkModel === userModelResponse) {
+        if (jobWorkModel === userModelResponse || userModelResponse === "4") {
             return {
                 criterion: "Work Model",
                 compatible: true,
@@ -184,13 +247,13 @@ function comparisonWorkModel (jobWorkModel, userModelResponse) {
                 compatible: false,
                 critical: true,
                 comparable: true,
-                message: "O usuário não cumpre o critério eleminatório de modalidade de trabalho.",
+                message: "O critério eleminatório de modalidade de trabalho não é compatível com o usuário.",
             };
         }
     }
 }
 
-const workModelResult = comparisonWorkModel (availableJob.workModel, candidateInfo.desiredWorkModel);
+const workModelResult = comparisonWorkModel (availableJobs.workModel, candidateInfo.desiredWorkModel);
 
 resultsObtained.push(workModelResult);
 
@@ -218,7 +281,7 @@ function comparisonExperience (jobRequiredExperience, userExperienceLevel) {
         }
         else {
             return {
-                criterion: "experience",
+                criterion: "Experience",
                 compatible: true,
                 critical: true,
                 comparable: true,
@@ -228,7 +291,7 @@ function comparisonExperience (jobRequiredExperience, userExperienceLevel) {
     }
 }
 
-const experienceResult = comparisonExperience (availableJob.requiredExperience, candidateInfo.experienceLevel);
+const experienceResult = comparisonExperience (availableJobs.requiredExperience, candidateInfo.experienceLevel);
 
 resultsObtained.push(experienceResult);
 
@@ -267,7 +330,7 @@ function comparisonLocation (jobLocationInformed, userPossibleLocations) {
     }
 }
 
-const locationResult = comparisonLocation (availableJob.jobLocation, candidateInfo.candidateLocations);
+const locationResult = comparisonLocation (availableJobs.jobLocation, candidateInfo.candidateLocations);
 
 resultsObtained.push(locationResult);
 
@@ -305,7 +368,7 @@ function comparisonShift (jobShiftType, userPreferredShift) {
     }
 }
 
-const shiftResult = comparisonShift (availableJob.shiftType, candidateInfo.preferredShift);
+const shiftResult = comparisonShift (availableJobs.shiftType, candidateInfo.preferredShift);
 
 resultsObtained.push(shiftResult);
 
@@ -356,7 +419,7 @@ function comparisonRequiredSkills (jobRequiredSkills, userSkills) {
     }
 }
 
-const requiredSkillsResult = comparisonRequiredSkills (availableJob.requiredSkills, candidateInfo.candidateSkills);
+const requiredSkillsResult = comparisonRequiredSkills (availableJobs.requiredSkills, candidateInfo.candidateSkills);
 
 resultsObtained.push(requiredSkillsResult);
 
@@ -364,11 +427,13 @@ function comparisonPreferredSkills (jobPreferredSkills, userSkills) {
 
     if (jobPreferredSkills === null) {
         return {
-            criterion: "Location",
-            compatible: null,
-            critical: false,
-            comparable: false,
-            message: "Dados não informados na descrisão da vaga",
+        criterion: "Preferred Skills",
+        critical: false,
+        comparable: false,
+        matchedSkills: null,
+        totalSkills: null,
+        percentage: null,
+        message: "A vaga não informou habilidades desejáveis ou diferenciais."
         };
     }
 
@@ -390,8 +455,9 @@ function comparisonPreferredSkills (jobPreferredSkills, userSkills) {
         let skillPercentage = (skillCount * 100) / jobPreferredSkills.length;
 
         return {
-            criterion: "preferred skills",
+            criterion: "Preferred Skills", 
             critical: false,
+            comparable: true,
             matchedSkills: skillCount,
             totalSkills: jobPreferredSkills.length,
             percentage: skillPercentage + "%",
@@ -400,7 +466,7 @@ function comparisonPreferredSkills (jobPreferredSkills, userSkills) {
     }
 }
 
-const preferredSkillsResult = comparisonPreferredSkills (availableJob.preferredSkills, candidateInfo.candidateSkills);
+const preferredSkillsResult = comparisonPreferredSkills (availableJobs.preferredSkills, candidateInfo.candidateSkills);
 
 resultsObtained.push(preferredSkillsResult);
 
@@ -447,11 +513,11 @@ function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
 
         else {
             salaryDiferrence = userSalaryExpectation - jobSalaryRange;
-        salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
+            salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
 
             return {
-            criterion: "salary",
-            ritical: false,
+            criterion: "Salary",
+            critical: false,
             comparable: true,
             relation: "below",
             difference: "R$ " + salaryDiferrence + ".00",
@@ -462,7 +528,7 @@ function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
     }
 }
 
-const salaryResult = comparisonSalary (availableJob.salaryRange, candidateInfo.salaryExpectation);
+const salaryResult = comparisonSalary (availableJobs.salaryRange, candidateInfo.salaryExpectation);
 
 resultsObtained.push(salaryResult);
 
