@@ -140,7 +140,7 @@ candidateInfo.salaryExpectation = userSalary;
 
 // Armazena o resultado das comparações realizadas em cada função
 
-const resultsObtained = [];
+const jobAnalysis = [];
 
 function comparisonJobType (informedJobType, userPreferredJob) {
 
@@ -175,10 +175,6 @@ function comparisonJobType (informedJobType, userPreferredJob) {
         }
     }
 }
-
-const jobTypeResult = comparisonJobType (availableJobs.jobType, candidateInfo.preferredJob);
-
-resultsObtained.push(jobTypeResult);
 
 function comparisonRequiredEducation (jobNecessaryEducation, userEducationResponse) {
 
@@ -215,10 +211,6 @@ function comparisonRequiredEducation (jobNecessaryEducation, userEducationRespon
     }   
 }
 
-const educationResult = comparisonRequiredEducation (availableJobs.requiredEducation, candidateInfo.educationLevel);
-
-resultsObtained.push(educationResult);
-
 function comparisonWorkModel (jobWorkModel, userModelResponse) {
 
     if (jobWorkModel === null) {
@@ -253,10 +245,6 @@ function comparisonWorkModel (jobWorkModel, userModelResponse) {
     }
 }
 
-const workModelResult = comparisonWorkModel (availableJobs.workModel, candidateInfo.desiredWorkModel);
-
-resultsObtained.push(workModelResult);
-
 function comparisonExperience (jobRequiredExperience, userExperienceLevel) {
 
     if (jobRequiredExperience === null) {
@@ -290,10 +278,6 @@ function comparisonExperience (jobRequiredExperience, userExperienceLevel) {
         }
     }
 }
-
-const experienceResult = comparisonExperience (availableJobs.requiredExperience, candidateInfo.experienceLevel);
-
-resultsObtained.push(experienceResult);
 
 function comparisonLocation (jobLocationInformed, userPossibleLocations) {
 
@@ -330,10 +314,6 @@ function comparisonLocation (jobLocationInformed, userPossibleLocations) {
     }
 }
 
-const locationResult = comparisonLocation (availableJobs.jobLocation, candidateInfo.candidateLocations);
-
-resultsObtained.push(locationResult);
-
 function comparisonShift (jobShiftType, userPreferredShift) {
 
     if (jobShiftType === null) {
@@ -367,10 +347,6 @@ function comparisonShift (jobShiftType, userPreferredShift) {
         }
     }
 }
-
-const shiftResult = comparisonShift (availableJobs.shiftType, candidateInfo.preferredShift);
-
-resultsObtained.push(shiftResult);
 
 // Para cada skill exigida, procura entre todas as skilss do usuário. Se uma obrigatória não for encontrada, retorna false. Só retorna true após verificar todas.
 
@@ -419,10 +395,6 @@ function comparisonRequiredSkills (jobRequiredSkills, userSkills) {
     }
 }
 
-const requiredSkillsResult = comparisonRequiredSkills (availableJobs.requiredSkills, candidateInfo.candidateSkills);
-
-resultsObtained.push(requiredSkillsResult);
-
 function comparisonPreferredSkills (jobPreferredSkills, userSkills) {
 
     if (jobPreferredSkills === null) {
@@ -465,10 +437,6 @@ function comparisonPreferredSkills (jobPreferredSkills, userSkills) {
         };
     }
 }
-
-const preferredSkillsResult = comparisonPreferredSkills (availableJobs.preferredSkills, candidateInfo.candidateSkills);
-
-resultsObtained.push(preferredSkillsResult);
 
 function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
 
@@ -528,11 +496,47 @@ function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
     }
 }
 
-const salaryResult = comparisonSalary (availableJobs.salaryRange, candidateInfo.salaryExpectation);
+for(let jobIndex = 0; jobIndex < availableJobs.length; jobIndex++) {
 
-resultsObtained.push(salaryResult);
+    const currentJob = availableJobs[jobIndex];
+    
+    const resultsObtained = []
 
-console.log(resultsObtained);
+    const jobTypeResult = comparisonJobType (currentJob.jobType, candidateInfo.preferredJob);
+    resultsObtained.push(jobTypeResult);
+
+    const requireEducationResult = comparisonRequiredEducation (currentJob.requiredEducation, candidateInfo.educationLevel);
+    resultsObtained.push(requireEducationResult);
+
+    const workModelResult = comparisonWorkModel (currentJob.workModel, candidateInfo.desiredWorkModel);
+    resultsObtained.push(workModelResult);
+
+    const experienceLevelResult = comparisonExperience (currentJob.requiredExperience, candidateInfo.experienceLevel);
+    resultsObtained.push(experienceLevelResult);
+
+    const jobLocationResult = comparisonLocation (currentJob.jobLocation, candidateInfo.candidateLocations);
+    resultsObtained.push(jobLocationResult);
+
+    const shiftTypeResult = comparisonShift (currentJob.shiftType, candidateInfo.preferredShift);
+    resultsObtained.push(shiftTypeResult);
+
+    const requiredSkillsResult = comparisonRequiredSkills (currentJob.requiredSkills, candidateInfo.candidateSkills);
+    resultsObtained.push(requiredSkillsResult);
+
+    const preferredSkillsResult = comparisonPreferredSkills (currentJob.preferredSkills, candidateInfo.candidateSkills);
+    resultsObtained.push(preferredSkillsResult)
+
+    const salaryExpectationResult = comparisonSalary (currentJob.salaryRange, candidateInfo.salaryExpectation);
+    resultsObtained.push(salaryExpectationResult);
+
+    jobAnalysis.push ({
+        companyName: currentJob.companyName,
+        jobTitle: currentJob.jobTitle,
+        results: resultsObtained,
+    })
+}
+
+console.log(jobAnalysis);
 
 // ---------------------------------------
 
