@@ -1,9 +1,14 @@
-// VagaTrack V0.1 - Programa para procurar e comparar vagas de emprego com base em dados enviado pelo usuário. A primeira versão será mais simples, apresentando um tipo de MVP prático apenas utilizando a base de programação em JavaScript. A ideia é progredir o projeto conforme andamento dos estudos para futuras aplicações de DOM, API, Banco de Dados, dentre outros.
+/*==================================================
+                VAGATRACK V0.1
+          Sistema de análise de vagas
+==================================================*/
 
-// O objeto avaiableJob define os parâmetros analisados em uma vaga para posterior comparação.
+// DEFINIÇÃO DOS PARÂMETROS ANALISADOS EM UMA VAGA PARA POSTERIOR COMPARAÇÃO 
 
 const availableJobs = [
-    // distinção entre os parâmetros considerando que o peso de cada um numa analise é diferente e determinante para saber se a vaga é ou não é boa para o usuário.
+
+    // DISTINÇÃO ENTRE CADA PARÂMETRO PARA INTERPRETAÇÃO MAIS ACERTIVA
+
 {
     //Informações Básicas
     companyName: "Hospital Unimed",
@@ -17,8 +22,8 @@ const availableJobs = [
     shiftType: "2",
     requiredSkills: ["lógica", "html", "css", "algoritmos"],
     // Crtitérios de Compatibilidade
-    preferredSkills: ["git", "js", "node"],
     salaryRange: null,
+    preferredSkills: ["git", "js", "node"],
 },
 {
     //Informações Básicas
@@ -33,8 +38,8 @@ const availableJobs = [
     shiftType: null,
     requiredSkills: ["js", "html", "sql", "api", "node"],
     // Crtitérios de Compatibilidade
-    preferredSkills: ["python", "opencv", "git", "mediapipe"],
     salaryRange: 1300,
+    preferredSkills: ["python", "opencv", "git", "mediapipe"],
 },
 {
     //Informações Básicas
@@ -49,8 +54,8 @@ const availableJobs = [
     shiftType: "3",
     requiredSkills: ["angular", "html", "css", "js", "api"],
     // Crtitérios de Compatibilidade
-    preferredSkills: ["react", "vue", "preact"],
     salaryRange: 3700,
+    preferredSkills: ["react", "vue", "preact"],
 },
 {
     //Informações Básicas
@@ -65,8 +70,8 @@ const availableJobs = [
     shiftType: "3",
     requiredSkills: ["python", "sql", "spark", "airflow", "aws", "docker"],
     // Crtitérios de Compatibilidade
-    preferredSkills: null,
     salaryRange: 8400,
+    preferredSkills: null,
 },
 {
     //Informações Básicas
@@ -81,12 +86,12 @@ const availableJobs = [
     shiftType: "3",
     requiredSkills: ["arquitetura", "microsserviços", "devops", "solid", "ci/cd"],
     // Crtitérios de Compatibilidade
-    preferredSkills: ["aws", "ingles", "alemão", "espanhol"],
     salaryRange: 17000,
+    preferredSkills: ["aws", "ingles", "alemão", "espanhol"],
 },
 ]
 
-// o objeto candidateInfo define os parâmetros enviados pelo usuário para que sejam comparados com os parâmetros verificados no objeto availableJob.
+// DEFINIÇÃO DOS VALORES QUE SERÃO ENVIADOS PELO USUÁRIO PARA QUE SEJAM COMPARADOS COM OS PARÂMETROS VERIFICIADOS EM CADA VAGA NO OBJETO AVAIBLEJOBS.
 
 const candidateInfo = {
     preferredJob: "",
@@ -99,7 +104,7 @@ const candidateInfo = {
     salaryExpectation: null,
 }
 
-// Declaração de variáveis para receber respostas do usuário e armazenar como parâmetros do objeto candidateInfo.
+// DECLARAÇÃO DE VARIÁVEIS PARA RECEBER AS INFORMAÇÕES DO USUÁRIO E ARMAZENAR COMO PARÂMETROS DO OBJETO CANDIDATEINFO.
 
 const userJob = prompt("Que tipo de vaga você está buscando?\n1 - Menor Aprendiz\n2 - Estágio\n3 - Júnior\n4 - Pleno\n5 - Sênior");
 candidateInfo.preferredJob = userJob;
@@ -122,7 +127,7 @@ for (let locationsEntered = 0; locationsEntered < 3; locationsEntered++) {
 const userShift = prompt("Em qual turno você deseja trabalhar?\n1 - Parcial manhãs\n2 - Parcial tardes\n3 - Integral");
 candidateInfo.preferredShift = userShift;
 
-// Permite cadastrar até 10 habilidades e interromper com "fim".
+// PERMITE CADASTRAR ATÉ 10 HABILIDADES, É INTERROMPIDO SE O USUÁRIO DIGITAR *FIM*.
 
 for (let skillsEntered = 0; skillsEntered < 10; skillsEntered++) {
 
@@ -138,9 +143,11 @@ for (let skillsEntered = 0; skillsEntered < 10; skillsEntered++) {
 const userSalary = Number(prompt("Qual sua pretensão salarial buscando um emprego?"));
 candidateInfo.salaryExpectation = userSalary;
 
-// Armazena o resultado das comparações realizadas em cada função
+// ARRAY PRINCIPAL PARA ARMAZENAMENTO DOS RESULTADOS GERADOS EM CADA FUNÇÃO POSTERIOR
 
 const jobAnalysis = [];
+
+// FUNÇÕES UTILIZADAS PARA COMPARAÇÃO DOS PARÂMETROS DE CADA VAGA
 
 function comparisonJobType (informedJobType, userPreferredJob) {
 
@@ -150,7 +157,7 @@ function comparisonJobType (informedJobType, userPreferredJob) {
             compatible: null,
             critical: true,
             comparable: false,
-            message: "Dados não informados na descrisão da vaga",
+            message: "⚪ Tipo de vaga não informado",
         };
     }
 
@@ -161,7 +168,7 @@ function comparisonJobType (informedJobType, userPreferredJob) {
                 compatible: true,
                 critical: true,
                 comparable: true,
-                message: "O tipo de vaga é compatível com a procura do usuário.",
+                message: "🟢 Tipo de vaga compatível",
             }
         }
         else {
@@ -170,7 +177,7 @@ function comparisonJobType (informedJobType, userPreferredJob) {
                 compatible: false,
                 critical: true,
                 comparable: true,
-                message: "O tipo de vaga não é compatível com a procura do usuário.",
+                message: "🔴 Tipo de vaga incompatível",
             }
         }
     }
@@ -184,7 +191,7 @@ function comparisonRequiredEducation (jobNecessaryEducation, userEducationRespon
             compatible: null,
             critical: true,
             comparable: false,
-            message: "Dados não informados na descrisão da vaga",
+            message: "⚪ Escolaridade mínima não informada",
         };
     }
 
@@ -195,7 +202,7 @@ function comparisonRequiredEducation (jobNecessaryEducation, userEducationRespon
                 compatible: true,
                 critical: true,
                 comparable: true,
-                message: "O usuário cumpre o critério eleminatório de escolaridade.",
+                message: "🟢 Escolaridade mínima compatível",
             };
         } 
     
@@ -205,7 +212,7 @@ function comparisonRequiredEducation (jobNecessaryEducation, userEducationRespon
                 compatible: false,
                 critical: true,
                 comparable: true,
-                message: "O usuário não cumpre o critério eleminatório de escolaridade.",
+                message: "🔴 Escolaridade mínima incompatível ",
             };
         }
     }   
@@ -219,7 +226,7 @@ function comparisonWorkModel (jobWorkModel, userModelResponse) {
             compatible: null,
             critical: true,
             comparable: false,
-            message: "Dados não informados na descrisão da vaga",
+            message: "⚪ Modalidade de trabalho não informada ",
         };
     }
 
@@ -230,16 +237,17 @@ function comparisonWorkModel (jobWorkModel, userModelResponse) {
                 compatible: true,
                 critical: true,
                 comparable: true,
-                message: "O usuário cumpre o critério eleminatório de modalidade de trabalho.",
+                message: "🟢 Modalidade de trabalho compatível",
             };
         }
+        
         else {
             return {
                 criterion: "Work Model",
                 compatible: false,
                 critical: true,
                 comparable: true,
-                message: "O critério eleminatório de modalidade de trabalho não é compatível com o usuário.",
+                message: "🔴 Modalidade de trabalho incompatível",
             };
         }
     }
@@ -253,7 +261,7 @@ function comparisonExperience (jobRequiredExperience, userExperienceLevel) {
             compatible: null,
             critical: true,
             comparable: false,
-            message: "Dados não informados na descrisão da vaga",
+            message: "⚪ Experiência mínima não informada",
         };
     }
 
@@ -264,7 +272,7 @@ function comparisonExperience (jobRequiredExperience, userExperienceLevel) {
                 compatible: false,
                 critical: true,
                 comparable: true,
-                message: "O usuário não possui a experiência necessária para a vaga.",
+                message: "🔴 Experiência mínima incompatível ",
             };
         }
         else {
@@ -273,7 +281,7 @@ function comparisonExperience (jobRequiredExperience, userExperienceLevel) {
                 compatible: true,
                 critical: true,
                 comparable: true,
-                message: "O usuário possui a experiência necessária para a vaga ou a vaga não exige experiência.",
+                message: "🟢 Experiência mínima compatível ",
             };
         }
     }
@@ -287,7 +295,7 @@ function comparisonLocation (jobLocationInformed, userPossibleLocations) {
             compatible: null,
             critical: true,
             comparable: false,
-            message: "Dados não informados na descrisão da vaga",
+            message: "⚪ Localização não informada",
         };
     }
 
@@ -300,7 +308,7 @@ function comparisonLocation (jobLocationInformed, userPossibleLocations) {
                     compatible: true,
                     critical: true,
                     comparable: true,
-                    message: "A localização da vaga é acessível ao usuário.",
+                    message: "🟢 Localização compatível",
                 };
             }
 
@@ -309,7 +317,7 @@ function comparisonLocation (jobLocationInformed, userPossibleLocations) {
             compatible: false,
             critical: true,
             comparable: true,
-            message: "A localização da vaga não é acessível ao usuário.",
+            message: "🔴 Localização incompatível",
         };
     }
 }
@@ -322,7 +330,7 @@ function comparisonShift (jobShiftType, userPreferredShift) {
             compatible: null,
             critical: true,
             comparable: false,
-            message: "Dados não informados na descrisão da vaga",
+            message: "⚪ Turno não informado",
         };
     }
 
@@ -333,7 +341,7 @@ function comparisonShift (jobShiftType, userPreferredShift) {
                 compatible: true,
                 critical: true,
                 comparable: true,
-                message: "O turno da vaga é compatível com a necessidade do usuário.",
+                message: "🟢 Turno compatível",
             }
         }
         else {
@@ -342,13 +350,14 @@ function comparisonShift (jobShiftType, userPreferredShift) {
                 compatible: false,
                 critical: true,
                 comparable: true,
-                message: "O turno da vaga não é compatível com a necessidade do usuário.",
+                message: "🔴 Turno Incompatível",
             }
         }
     }
 }
 
-// Para cada skill exigida, procura entre todas as skilss do usuário. Se uma obrigatória não for encontrada, retorna false. Só retorna true após verificar todas.
+// PARA CADA SKILL EXIGIDA, PROCURA ENTRE TODAS AS SKILLS DO USUÁRIO. SE UMA OBRIGATÓRIA NÃO FOR ENCONTRADA, RETORNA FALSE.
+// SÓ RETORNA TRUE APÓS VERIFICAR TODAS
 
 function comparisonRequiredSkills (jobRequiredSkills, userSkills) {
 
@@ -358,7 +367,7 @@ function comparisonRequiredSkills (jobRequiredSkills, userSkills) {
             compatible: null,
             critical: true,
             comparable: false,
-            message: "Dados não informados na descrisão da vaga",
+            message: "⚪ Habilidades necessárias não informadas",
         };
     }
 
@@ -381,7 +390,7 @@ function comparisonRequiredSkills (jobRequiredSkills, userSkills) {
                 compatible: false,
                 critical: true,
                 comparable: true,
-                message: "O usuário não possui todas as habilidades requeridas pela vaga.",
+                message: "🔴 Habilidades necessárias incompatíveis",
                 };
             }
         
@@ -390,8 +399,66 @@ function comparisonRequiredSkills (jobRequiredSkills, userSkills) {
             compatible: true,
             critical: true,
             comparable: true,
-            message: "O usuário possui todas as habilidades requeridas pela vaga.",
+            message: "🟢 Habilidades necessárias compatíveis ",
         };
+    }
+}
+
+function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
+
+    if (jobSalaryRange === null) {
+        return {
+            criterion: "Salary",
+            compatible: null,
+            critical: false,
+            comparable: false,
+            message: "⚪ Salário não informado",
+        };
+    }
+
+    else {
+        let salaryDiferrence;
+        let salaryDiferrencePercentage;
+
+        if (jobSalaryRange > userSalaryExpectation) {
+            salaryDiferrence = jobSalaryRange - userSalaryExpectation;
+            salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
+
+            return {
+            criterion: "Salary",
+            critical: false,
+            comparable: true,
+            relation: "above",
+            difference: "R$ " + salaryDiferrence + ".00",
+            differencePercentage: salaryDiferrencePercentage + "%",
+            message: "🟢 Salário compatível (" + salaryDiferrencePercentage.toFixed(2) + "% maior do que a pretensão)",
+            };
+        }
+
+        else if (jobSalaryRange === userSalaryExpectation) {
+            return {
+            criterion: "Salary",
+            critical: false,
+            comparable: true,
+            relation: "equal",
+            message: "🟢 Salário compatível (equivalente a pretensão)",
+            };
+        }
+
+        else {
+            salaryDiferrence = userSalaryExpectation - jobSalaryRange;
+            salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
+
+            return {
+            criterion: "Salary",
+            critical: false,
+            comparable: true,
+            relation: "below",
+            difference: "R$ " + salaryDiferrence + ".00",
+            differencePercentage: salaryDiferrencePercentage + "%",
+            message: "🔴 Salário incompatível (" + salaryDiferrencePercentage.toFixed(2) + "% menor do que a pretensão)",
+            }
+        }
     }
 }
 
@@ -405,7 +472,7 @@ function comparisonPreferredSkills (jobPreferredSkills, userSkills) {
         matchedSkills: null,
         totalSkills: null,
         percentage: null,
-        message: "A vaga não informou habilidades desejáveis ou diferenciais."
+        message: "⚪ Habilidades desejáveis não informadas"
         };
     }
 
@@ -433,68 +500,12 @@ function comparisonPreferredSkills (jobPreferredSkills, userSkills) {
             matchedSkills: skillCount,
             totalSkills: jobPreferredSkills.length,
             percentage: skillPercentage + "%",
-            message: "O usuário possui " + skillCount + " habilidades das " + jobPreferredSkills.length + " mencionadas como diferenciais na vaga",
+            message: "🎯 O usuário possui " + skillCount + " habilidades das " + jobPreferredSkills.length + " mencionadas como diferenciais na vaga",
         };
     }
 }
 
-function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
-
-    if (jobSalaryRange === null) {
-        return {
-            criterion: "Salary",
-            compatible: null,
-            critical: false,
-            comparable: false,
-            message: "Dados não informados na descrisão da vaga",
-        };
-    }
-
-    else {
-        let salaryDiferrence;
-        let salaryDiferrencePercentage;
-
-        if (jobSalaryRange > userSalaryExpectation) {
-            salaryDiferrence = jobSalaryRange - userSalaryExpectation;
-            salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
-
-            return {
-            criterion: "Salary",
-            critical: false,
-            comparable: true,
-            relation: "above",
-            difference: "R$ " + salaryDiferrence + ".00",
-            differencePercentage: salaryDiferrencePercentage + "%",
-            message: "O salário é " + salaryDiferrencePercentage.toFixed(2) + "% maior do que a pretensão do usuário",
-            };
-        }
-
-        else if (jobSalaryRange === userSalaryExpectation) {
-            return {
-            criterion: "Salary",
-            critical: false,
-            comparable: true,
-            relation: "equal",
-            message: "O salário oferecido é equivalente a pretensão do usuário",
-            };
-        }
-
-        else {
-            salaryDiferrence = userSalaryExpectation - jobSalaryRange;
-            salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
-
-            return {
-            criterion: "Salary",
-            critical: false,
-            comparable: true,
-            relation: "below",
-            difference: "R$ " + salaryDiferrence + ".00",
-            differencePercentage: salaryDiferrencePercentage + "%",
-            message: "O salário é " + salaryDiferrencePercentage.toFixed(2) + "% menor do que a pretensão do usuário",
-            }
-        }
-    }
-}
+// DIRECIONAMENTO DOS RESULTADOS PARA O ARRAY PRINCIPAL
 
 for(let jobIndex = 0; jobIndex < availableJobs.length; jobIndex++) {
 
@@ -523,11 +534,11 @@ for(let jobIndex = 0; jobIndex < availableJobs.length; jobIndex++) {
     const requiredSkillsResult = comparisonRequiredSkills (currentJob.requiredSkills, candidateInfo.candidateSkills);
     resultsObtained.push(requiredSkillsResult);
 
-    const preferredSkillsResult = comparisonPreferredSkills (currentJob.preferredSkills, candidateInfo.candidateSkills);
-    resultsObtained.push(preferredSkillsResult)
-
     const salaryExpectationResult = comparisonSalary (currentJob.salaryRange, candidateInfo.salaryExpectation);
     resultsObtained.push(salaryExpectationResult);
+
+    const preferredSkillsResult = comparisonPreferredSkills (currentJob.preferredSkills, candidateInfo.candidateSkills);
+    resultsObtained.push(preferredSkillsResult)
 
     jobAnalysis.push ({
         companyName: currentJob.companyName,
@@ -536,10 +547,19 @@ for(let jobIndex = 0; jobIndex < availableJobs.length; jobIndex++) {
     })
 }
 
+// APRESENTAÇÃO FINAL DOS RESULTADOS
+
 console.log(jobAnalysis);
 
-// ---------------------------------------
+const presentationInit = jobAnalysis.map((job) => {
 
-// O programa compara através de uma função cada um dos tópicos ex: requiredExperience vs experienceLevel.
+    const resultsPresentation = job.results.map((result) => {
+        return result.message;
+    });
 
-/* Ele baseia sua tomada de decisão inicial a partir dos parâmetros eleminatórios, se falhar e um dos requisitos não for atendido, ele retorna incompatibilidade com a vaga. Se ele atender a todos os requisitos eliminatórios mas falhar nos critérios não eleminatórios ele retorna um positivo, com ressalvas a serem consideradas pelo proprio usuário. Por último, se tanto os requisitos eliminatórios estiverem corretos e os critérios não eleminatórios estiverem positivos em suma maioria, o sistema retornara fortemente a recomendação da vaga.*/
+    return "Empresa: " + job.companyName + "\nVaga: " + job.jobTitle + "\n\n" + resultsPresentation.join("\n");
+});
+
+const finalPresentation = presentationInit.join("\n\n----------------------------------------\n\n");
+
+console.log(finalPresentation);
