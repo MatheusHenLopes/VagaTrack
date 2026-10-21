@@ -299,27 +299,23 @@ function comparisonLocation (jobLocationInformed, userPossibleLocations) {
         };
     }
 
-    else {
-        for (let verifiedLocations = 0; verifiedLocations < userPossibleLocations.length; verifiedLocations++) {
-            
-            if (jobLocationInformed === userPossibleLocations[verifiedLocations])
-                return {
-                    criterion: "Location",
-                    compatible: true,
-                    critical: true,
-                    comparable: true,
-                    message: "🟢 Localização compatível",
-                };
-            }
-
+    if (userPossibleLocations.includes(jobLocationInformed)) {
         return {
+            criterion: "Location",
+            compatible: true,
+            critical: true,
+            comparable: true,
+            message: "🟢 Localização compatível",
+        };
+    }
+
+    return {
             criterion: "Location",
             compatible: false,
             critical: true,
             comparable: true,
             message: "🔴 Localização incompatível",
-        };
-    }
+    };
 }
 
 function comparisonShift (jobShiftType, userPreferredShift) {
@@ -416,28 +412,20 @@ function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
         };
     }
 
-    else {
-        let salaryDiferrence;
-        let salaryDiferrencePercentage;
-
-        if (jobSalaryRange > userSalaryExpectation) {
-            salaryDiferrence = jobSalaryRange - userSalaryExpectation;
-            salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
-
-            return {
+    if (userSalaryExpectation <= 0 || Number.isNaN(userSalaryExpectation)) {
+        return {
             criterion: "Salary",
+            compatible: null,
             critical: false,
-            comparable: true,
-            relation: "above",
-            difference: "R$ " + salaryDiferrence + ".00",
-            differencePercentage: salaryDiferrencePercentage + "%",
-            message: "🟢 Salário compatível (" + salaryDiferrencePercentage.toFixed(2) + "% maior do que a pretensão)",
-            };
-        }
+            comparable: false,
+            message: "⚪ Pretensão salárial não informada pelo usuário ou inválida",
+        };
+    }
 
-        else if (jobSalaryRange === userSalaryExpectation) {
-            return {
+     if (jobSalaryRange === userSalaryExpectation) {
+        return {
             criterion: "Salary",
+            compatible: true,
             critical: false,
             comparable: true,
             relation: "equal",
@@ -445,20 +433,37 @@ function comparisonSalary (jobSalaryRange, userSalaryExpectation) {
             };
         }
 
-        else {
-            salaryDiferrence = userSalaryExpectation - jobSalaryRange;
-            salaryDiferrencePercentage = (salaryDiferrence * 100) / userSalaryExpectation;
+    let salaryDifference;
+    let salaryDifferencePercentage;
 
-            return {
+    if (jobSalaryRange > userSalaryExpectation) {
+        salaryDifference = jobSalaryRange - userSalaryExpectation;
+        salaryDifferencePercentage = (salaryDifference * 100) / userSalaryExpectation;
+
+        return {
             criterion: "Salary",
+            compatible: true,
             critical: false,
             comparable: true,
-            relation: "below",
-            difference: "R$ " + salaryDiferrence + ".00",
-            differencePercentage: salaryDiferrencePercentage + "%",
-            message: "🔴 Salário incompatível (" + salaryDiferrencePercentage.toFixed(2) + "% menor do que a pretensão)",
-            }
+            relation: "above",
+            difference: "R$ " + salaryDifference + ".00",
+            differencePercentage: salaryDifferencePercentage + "%",
+            message: "🟢 Salário compatível (" + salaryDifferrencePercentage.toFixed(2) + "% maior do que a pretensão)",
+            };
         }
+
+    salaryDifference = userSalaryExpectation - jobSalaryRange;
+    salaryDifferencePercentage = (salaryDifference * 100) / userSalaryExpectation;
+
+    return {
+        criterion: "Salary",
+        compatible: false,
+        critical: false,
+        comparable: true,
+        relation: "below",
+        difference: "R$ " + salaryDifference + ".00",
+        differencePercentage: salaryDifferencePercentage + "%",
+        message: "🔴 Salário incompatível (" + salaryDifferencePercentage.toFixed(2) + "% menor do que a pretensão)",
     }
 }
 
